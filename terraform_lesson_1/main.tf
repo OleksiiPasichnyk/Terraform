@@ -15,8 +15,8 @@ terraform {
 
 provider "aws" {
   region     = "us-east-1"
-  access_key = PUT_YOURKEY_ID_HERE
-  secret_key = PUT_YOUR_KEY_VALUE_HERE
+  access_key = var.key_id
+  secret_key = var.key_value
 }
 
 #resource "tls_private_key" "test_key" {
@@ -48,7 +48,7 @@ resource "aws_security_group" "web-sg" {
 }
 
 resource "aws_instance" "test" {
-  ami                    = "ami-0715c1897453cabd1"
+  ami                    = "ami-053b0d53c279acc90" #Ubuntu
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
@@ -57,23 +57,22 @@ resource "aws_instance" "test" {
   }
 }
 
-resource "aws_instance" "test_powerfull" {
-  ami                    = "ami-0715c1897453cabd1"
-  instance_type          = "c6a.large"
-  vpc_security_group_ids = [aws_security_group.web-sg.id]
-  key_name               = "lesson_7_ansible"
-  tags = {
-    Name = "Test insta_Lesson_TF_Ansible"
-  }
-}
-
+#resource "aws_instance" "test_powerfull" {
+#  ami                    = "ami-053b0d53c279acc90" #Ubuntu
+#  instance_type          = "c6a.large"
+#  vpc_security_group_ids = [aws_security_group.web-sg.id]
+#  key_name               = "lesson_7_ansible"
+#  tags = {
+#    Name = "Test insta_Lesson_TF_Ansible"
+#  }
+#}
 
 output "web-address_test_instance" {
   value = aws_instance.test.public_dns
 }
-output "web-address_ansible_instance" {
-  value = aws_instance.ansible_on_ubuntu.public_dns
-}
+#output "web-address_test_instance_powerfull" {
+#  value = aws_instance.test_powerfull.public_dns
+#}
 
 data "aws_caller_identity" "current" {}
 
@@ -83,8 +82,4 @@ output "account_id" {
 
 output "caller_arn" {
   value = data.aws_caller_identity.current.arn
-}
-
-output "caller_user" {
-  value = data.aws_caller_identity.current.user_id
 }
