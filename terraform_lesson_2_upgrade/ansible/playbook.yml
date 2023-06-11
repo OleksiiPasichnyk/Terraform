@@ -1,0 +1,45 @@
+---
+- name: install
+  hosts: all
+  remote_user: ubuntu
+  vars:
+    ansible_ssh_private_key_file: /home/axelp/Downloads/lesson_7_ansible.pem
+  tasks:
+  - name: update apt
+    command: apt-get update
+    become: true
+  - name: "Add nodejs apt key"
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+    become: true
+  - name: "Add nodejs 16.x ppa for apt repo"
+    apt_repository:
+      repo: deb https://deb.nodesource.com/node_16.x bionic main
+      update_cache: yes
+    become: true
+  - name: Ensure nodejs installed
+    ansible.builtin.apt:
+      name: nodejs
+      state: present
+    become: true
+  - name: Ensure git is installed
+    ansible.builtin.apt:
+      name: git
+      state: latest
+    become: true
+  - name: copy repository
+    shell: |
+      rm -rf to_do_list_local_version
+      git clone https://github.com/OleksiiPasichnyk/to_do_list_local_version.git
+  - name: npm install
+    shell: |
+      cd to_do_list_local_version
+      npm install
+  - name: install pm2
+    shell: npm install pm2 --location=global
+    become: true
+  - name: Start my app
+    shell: |
+     cd to_do_list_local_version
+     pm2 start npm --name "my_app" -- start 
