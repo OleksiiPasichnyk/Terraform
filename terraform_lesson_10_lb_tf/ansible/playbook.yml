@@ -37,9 +37,11 @@
       cd to_do_list_local_version
       npm install
   - name: install pm2
-    shell: npm install pm2 --location=global
+    shell: | 
+      npm install pm2 --location=global
     become: true
   - name: Start my app
     shell: |
+     pm2 stop all
      cd to_do_list_local_version
      pm2 start npm --name "my_app" -- start 
