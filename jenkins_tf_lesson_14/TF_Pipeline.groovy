@@ -1,20 +1,19 @@
 pipeline {
    agent any
    tools { terraform "latest" }
-   tools { github ""}
    parameters {
-          string(name: 'key_id', defaultValue: 'null', description: 'your aws access key id')
-          string(name: 'key_value', defaultValue: 'null', description: 'your aws access key value')
+          string(name: 'key_id', defaultValue: 'AKIAR6YRKIU3SILKELT3', description: 'your aws access key id')
+          string(name: 'key_value', defaultValue: 'M9pXLwDA6NkNsxhswoAZPHvPXmaPM3oyn1qO6hkn', description: 'your aws access key value')
            }
    stages{
       stage ('clone git repo') {
         steps {
-          git (url: 'https://github.com/OleksiiPasichnyk/Terraform.git', credentialsId: 'MyPrivateGithub' )
+          git (branch: 'main', url: 'git@github.com:OleksiiPasichnyk/Terraform.git', credentialsId: 'access_to_git' )
         }
       }
       stage ('Plan') {
         steps {
-          sh 'cd Terraform/jenkins_tf_lesson_14/terraform_infra'
+          sh 'cd ./jenkins_tf_lesson_14/terraform_infra'
           sh 'echo "variable "key_id"=${params.key_id}" > variables.tf'
           sh 'echo "variable "key_value"=${params.key_value}" >> variables.tf'
           sh 'cat variables.tf'
