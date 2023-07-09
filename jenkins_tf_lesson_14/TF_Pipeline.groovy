@@ -2,8 +2,8 @@ pipeline {
    agent any
    tools { terraform "latest" }
    parameters {
-          string(name: 'key_id', defaultValue: 'AKIAR6YRKIU3SILKELT3', description: 'your aws access key id')
-          string(name: 'key_value', defaultValue: 'M9pXLwDA6NkNsxhswoAZPHvPXmaPM3oyn1qO6hkn', description: 'your aws access key value')
+          string(name: 'key_id', defaultValue: 'null', description: 'your aws access key id')
+          string(name: 'key_value', defaultValue: 'null', description: 'your aws access key value')
            }
    stages{
       stage ('clone git repo') {
