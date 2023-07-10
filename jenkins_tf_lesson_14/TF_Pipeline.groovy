@@ -40,10 +40,14 @@ pipeline {
     }
     stage('Destroy') {
         steps {
+        sh '''
+        cd ./jenkins_tf_lesson_14/terraform_infra/
+        terraform plan -destroy -out destroyplan.tfplan
+        '''
         input message: 'proceed or abort?', ok: 'ok'
         sh '''
         cd ./jenkins_tf_lesson_14/terraform_infra/
-        terraform destroy terraform.tfplan
+        terraform apply destroyplan.tfplan
         '''
        }
      }
