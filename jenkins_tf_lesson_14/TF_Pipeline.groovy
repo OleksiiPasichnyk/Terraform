@@ -1,34 +1,51 @@
 pipeline {
-   agent any
-   tools { terraform "latest" }
-   parameters {
-          string(name: 'key_id', defaultValue: 'null', description: 'your aws access key id')
-          string(name: 'key_value', defaultValue: 'null', description: 'your aws access key value')
-           }
-   stages{
-      stage ('clone git repo') {
-        steps {
-          git (branch: 'main', url: 'git@github.com:OleksiiPasichnyk/Terraform.git', credentialsId: 'access_to_git' )
-        }
-      }
-      stage ('Plan') {
-        steps {
-          sh 'cd ./jenkins_tf_lesson_14/terraform_infra'
-          sh 'echo "variable "key_id"=${params.key_id}" > variables.tf'
-          sh 'echo "variable "key_value"=${params.key_value}" >> variables.tf'
-          sh 'cat variables.tf'
-          sh 'terraform plan -out=terraform.tfplan'
-        }
-      }
-      stage('Plan verification and user input') {
-        steps {
-            input(message: 'Proceed or abort?', ok: 'Proceed', parameters: [[$class: 'AbortException', name: 'Abort']])
-        }
-    }
-      stage ('Apply') {
-        steps {
-          sh 'terraform apply terraform.tfplan'
-        }
-      }
-    }
+  agent any
+  tools {
+    terraform "latest"
   }
+  stages {
+    stage('Clone Git repo') {
+      steps {
+        git(branch: 'main', url: 'git@github.com:OleksiiPasichnyk/Terraform.git', credentialsId: 'access_to_git')
+      }
+    }
+    stage('Plan') {
+      steps {
+         withCredentials([
+          usernamePassword(credentialsId: 'simple_creds_aws', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')
+            ]) {
+          sh '''
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            cd ./jenkins_tf_lesson_14/terraform_infra/
+            terraform init 
+            terraform plan -out=terraform.tfplan
+          '''
+          }
+          
+        }
+      }
+    stage('Plan verification and user input') {
+      steps {
+        input message: 'proceed or abort?', ok: 'ok'
+      }
+    }
+    stage('Apply') {
+        steps {
+           sh '''
+           cd ./jenkins_tf_lesson_14/terraform_infra/
+           terraform apply terraform.tfplan
+           '''
+        }
+    }
+    stage('Destroy') {
+        steps {
+        input message: 'proceed or abort?', ok: 'ok'
+        sh '''
+        cd ./jenkins_tf_lesson_14/terraform_infra/
+        terraform destroy terraform.tfplan
+        '''
+       }
+     }
+   }
+}
