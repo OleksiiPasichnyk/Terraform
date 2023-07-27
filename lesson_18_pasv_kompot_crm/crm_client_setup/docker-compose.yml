@@ -1,0 +1,15 @@
+version: "3"
+services:
+  jenkins:
+    container_name: crm-client
+    image:   crm-client:devops
+    restart: unless-stopped
+    networks:
+      - crm-client
+    volumes:
+     - '/home/axelp/personal/PASV/kompot/crmClient:/app'
+    ports:
+    - 8000:8000
+networks:
+  crm-client:
+    external: true
