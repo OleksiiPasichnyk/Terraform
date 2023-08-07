@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: crmclient
+spec:
+  selector:
+    app: crmclient
+  ports:
+  - name: web # name is not required for single-port Services
+    port: 8000 
+    nodePort: 30001
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmclient
+  labels:
+    app: crmclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmclient
+  template:
+    metadata:
+      labels:
+        app: crmclient
+    spec:
+      containers:
+      - name: crmclient
+        image: "134790923575.dkr.ecr.us-east-1.amazonaws.com/kompot-fe:latest"
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000

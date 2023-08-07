@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: crmserver
+spec:
+  selector:
+    app: crmserver
+  ports:
+  - name: web # name is not required for single-port Services
+    port: 5000  
+    nodePort: 30005
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmserver
+  labels:
+    app: crmserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmserver
+  template:
+    metadata:
+      labels:
+        app: crmserver
+    spec:
+      containers:
+      - name: crmserver
+        image: "134790923575.dkr.ecr.us-east-1.amazonaws.com/kompot-be:latest"
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        resources:
+         requests:
+           memory: "512Mi"
+           cpu: "500m"
+         limits:
+           memory: "1024Mi"
+           cpu: "1000m"
