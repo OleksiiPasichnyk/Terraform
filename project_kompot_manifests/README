@@ -1,0 +1,11 @@
+to start working with project
+1. minikube start
+2. eval $(minikube docker-env)
+3. docker pull 134790923575.dkr.ecr.us-east-1.amazonaws.com/kompot-fe:latest
+4. docker pull 134790923575.dkr.ecr.us-east-1.amazonaws.com/kompot-be:latest
+5. kubectl apply -f /minikube/client.yaml
+5. kubectl apply -f /minikube/backend_server.yaml
+6. kubectl apply -f /minikube/deployment-Mongo.yaml
+
+
+
