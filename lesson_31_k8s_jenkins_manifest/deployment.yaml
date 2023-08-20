@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: jenkins
+  name: jenkins-oleksii-oleksii
 spec:
   selector:
-    app: jenkins
+    app: jenkins-oleksii
   ports:
   - port: 8080
     targetPort: 8080
@@ -13,16 +13,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jenkins
+  name: jenkins-oleksii
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jenkins
+      app: jenkins-oleksii
   template:
     metadata:
       labels:
-        app: jenkins
+        app: jenkins-oleksii
     spec:
       containers:
       - name: jenkins
