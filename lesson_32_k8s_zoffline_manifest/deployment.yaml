@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoffline
+spec:
+  selector:
+    app: zoffline
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: https
+    protocol: TCP
+  - name: udp
+    port: 3024
+    targetPort: udp
+    protocol: UDP
+  - name: tcp
+    port: 3025
+    targetPort: tcp
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: zoffline
+  name: zoffline
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: zoffline
+  template:
+    metadata:
+      labels:
+        app: zoffline
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: zoffline
+        image: zoffline/zoffline:latest
+        env:
+        - name: TZ
+          value: "Europe/London"
+        resources:
+          requests:
+            memory: "7000M"
+            cpu: "3000m"
+          limits:
+            memory: "8000M"
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        - name: udp
+          containerPort: 3024
+        - name: tcp
+          containerPort: 3025
+        volumeMounts:
+         - name: zoffline-config
+           mountPath: /usr/src/app/zwift-offline/storage
+      volumes:
+      - name: zoffline-config
+        persistentVolumeClaim:
+          claimName: local-path-zoffline-pvc
+      nodeSelector:
+        kubernetes.io/hostname: k3s-slave-2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-path-zoffline-pvc
+  namespace: zoffline
+  annotations:
+    volumeType: hostPath
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 50Gi

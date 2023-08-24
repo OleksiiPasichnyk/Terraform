@@ -13,26 +13,56 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jenkins-oleksii
+  namespace: jenkins
+  name: jenkins
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
   selector:
     matchLabels:
-      app: jenkins-oleksii
+      app: jenkins
   template:
     metadata:
       labels:
-        app: jenkins-oleksii
+        app: jenkins
     spec:
+      restartPolicy: Always
       containers:
       - name: jenkins
         image: jenkins/jenkins:lts
         resources:
           requests:
-            memory: "8000M"
-            cpu: "2000m"
+            memory: "4000M"
+            cpu: "1500m"
           limits:
-            memory: "16000M"
-            cpu: "4000m"
+            memory: "6500M"
+            cpu: "2000m"
         ports:
         - containerPort: 8080
+        volumeMounts:
+         - name: jenkins-config
+           mountPath: /var/jenkins_home
+      volumes:
+      - name: jenkins-config
+        persistentVolumeClaim:
+          claimName: local-path-jenkins-pvc
+      nodeSelector:
+        kubernetes.io/hostname: k3s-master
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-path-jenkins-pvc
+  namespace: jenkins
+  annotations:
+    volumeType: hostPath
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 15Gi
