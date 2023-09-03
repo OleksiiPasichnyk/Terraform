@@ -4,7 +4,6 @@ resource "aws_instance" "test_c6a_large_1" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
-  become                 = true
   user_data = <<-EOF
               #!/bin/bash
               sudo su
@@ -39,7 +38,6 @@ resource "aws_instance" "test_c6a_large_2" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
-  become                 = true
   user_data = <<-EOF
               #!/bin/bash
               sudo su
