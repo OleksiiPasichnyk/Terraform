@@ -18,12 +18,13 @@ resource "aws_instance" "test_c6a_large_1" {
 </head>
 <body>
   <h1>Hello, Team.  </h1>
-    <h1>Welcome to server 2!</h1>
+  <h1>Welcome to server 1!</h1>
 </body>
 </html>' > /var/www/html/index.html
-              apt install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
+              apt-get update
+              apt-get install -y apache2
+              systemctl start apache2
+              systemctl enable apache2
               EOF
 
   tags = {
@@ -50,14 +51,14 @@ resource "aws_instance" "test_c6a_large_2" {
 </head>
 <body>
   <h1>Hello, Team.  </h1>
-    <h1>Welcome to server 2!</h1>
+  <h1>Welcome to server 2!</h1>
 </body>
 </html>' > /var/www/html/index.html
-              apt install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
+              apt-get update
+              apt-get install -y apache2
+              systemctl start apache2
+              systemctl enable apache2
               EOF
-
   tags = {
     Name = "Test_2"
   }
