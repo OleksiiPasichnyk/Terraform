@@ -7,6 +7,7 @@ resource "aws_instance" "test_c6a_large_1" {
   become                 = true
   user_data = <<-EOF
               #!/bin/bash
+              sudo su
               apt-get update
               apt-get install -y apache2
               systemctl start apache2
@@ -41,6 +42,7 @@ resource "aws_instance" "test_c6a_large_2" {
   become                 = true
   user_data = <<-EOF
               #!/bin/bash
+              sudo su
               apt-get update
               apt-get install -y apache2
               systemctl start apache2
