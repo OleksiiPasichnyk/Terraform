@@ -6,6 +6,10 @@ resource "aws_instance" "test_c6a_large_1" {
   key_name               = "lesson_7_ansible"
   user_data = <<-EOF
               #!/bin/bash
+              apt-get update
+              apt-get install -y apache2
+              systemctl start apache2
+              systemctl enable apache2
               echo '<!DOCTYPE html>
 <html>
 <head>
@@ -21,10 +25,6 @@ resource "aws_instance" "test_c6a_large_1" {
   <h1>Welcome to server 1!</h1>
 </body>
 </html>' > /var/www/html/index.html
-              apt-get update
-              apt-get install -y apache2
-              systemctl start apache2
-              systemctl enable apache2
               EOF
 
   tags = {
@@ -39,6 +39,10 @@ resource "aws_instance" "test_c6a_large_2" {
   key_name               = "lesson_7_ansible"
   user_data = <<-EOF
               #!/bin/bash
+              apt-get update
+              apt-get install -y apache2
+              systemctl start apache2
+              systemctl enable apache2
               echo '<!DOCTYPE html>
 <html>
 <head>
@@ -54,10 +58,6 @@ resource "aws_instance" "test_c6a_large_2" {
   <h1>Welcome to server 2!</h1>
 </body>
 </html>' > /var/www/html/index.html
-              apt-get update
-              apt-get install -y apache2
-              systemctl start apache2
-              systemctl enable apache2
               EOF
   tags = {
     Name = "Test_2"
