@@ -21,7 +21,7 @@ resource "aws_instance" "test_c6a_large_1" {
     <h1>Welcome to server 2!</h1>
 </body>
 </html>' > /var/www/html/index.html
-              yum install -y httpd
+              apt install -y httpd
               systemctl start httpd
               systemctl enable httpd
               EOF
@@ -53,7 +53,7 @@ resource "aws_instance" "test_c6a_large_2" {
     <h1>Welcome to server 2!</h1>
 </body>
 </html>' > /var/www/html/index.html
-              yum install -y httpd
+              apt install -y httpd
               systemctl start httpd
               systemctl enable httpd
               EOF
