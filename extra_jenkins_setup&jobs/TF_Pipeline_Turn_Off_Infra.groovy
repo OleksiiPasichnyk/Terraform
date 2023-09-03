@@ -17,12 +17,12 @@ pipeline {
         sh '''
         aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
         aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-        cd ./lesson_16_jenkins_docker/terraform_infra/
+        cd ./generic_infra_setup/
         terraform plan -destroy -out destroyplan.tfplan
         '''
         input message: 'proceed or abort?', ok: 'ok'
         sh '''
-        cd ./lesson_16_jenkins_docker/terraform_infra/
+        cd ./generic_infra_setup/
         terraform apply destroyplan.tfplan
         '''
        }
