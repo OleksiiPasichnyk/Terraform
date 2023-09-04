@@ -4,30 +4,30 @@ resource "aws_instance" "test_c6a_large_1" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo su
-              apt-get update
-              apt-get install -y apache2
-              systemctl start apache2
-              systemctl enable apache2
-              echo '<!DOCTYPE html>
-<html>
-<head>
-<style>
-  body {
-    background-color: #A1B0FF; /* Replace with your desired background color */
-  	text-align: center; /* Center-align text within the body */
-  }
-</style>
-</head>
-<body>
-  <h1>Hello, Team.  </h1>
-  <h1>Welcome to server 1!</h1>
-</body>
-</html>' > /var/www/html/index.html
-              EOF
-
+  user_data              = <<-EOF
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y apache2
+    sudo systemctl start apache2
+    sudo systemctl enable apache2
+    sudo bash -c 'cat > /var/www/html/index.html' <<EOF_HTML
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <style>
+      body {
+        background-color: #A1B0FF;
+        text-align: center;
+      }
+    </style>
+    </head>
+    <body>
+      <h1>Hello, Team.</h1>
+      <h1>Welcome to server 1!</h1>
+    </body>
+    </html>
+    EOF_HTML
+  EOF
   tags = {
     Name = "Test_1"
   }
@@ -38,29 +38,30 @@ resource "aws_instance" "test_c6a_large_2" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo su
-              apt-get update
-              apt-get install -y apache2
-              systemctl start apache2
-              systemctl enable apache2
-              echo '<!DOCTYPE html>
-<html>
-<head>
-<style>
-  body {
-    background-color: #A1B0FF; /* Replace with your desired background color */
-  	text-align: center; /* Center-align text within the body */
-  }
-</style>
-</head>
-<body>
-  <h1>Hello, Team.  </h1>
-  <h1>Welcome to server 2!</h1>
-</body>
-</html>' > /var/www/html/index.html
-              EOF
+  user_data              = <<-EOF
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y apache2
+    sudo systemctl start apache2
+    sudo systemctl enable apache2
+    sudo bash -c 'cat > /var/www/html/index.html' <<EOF_HTML
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <style>
+      body {
+        background-color: #A1B0FF;
+        text-align: center;
+      }
+    </style>
+    </head>
+    <body>
+      <h1>Hello, Team.</h1>
+      <h1>Welcome to server 2!</h1>
+    </body>
+    </html>
+    EOF_HTML
+  EOF
   tags = {
     Name = "Test_2"
   }

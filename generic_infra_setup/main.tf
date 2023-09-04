@@ -11,16 +11,16 @@ terraform {
   }
 
   backend "s3" {
-    bucket     = "terraform-state-oleksii"
-    key        = "terraform_my_infra.tfstate"
-    region     = "us-east-1"
+    bucket = "terraform-state-oleksii"
+    key    = "terraform_my_infra.tfstate"
+    region = "us-east-1"
   }
 
   required_version = ">= 1.3"
 }
 
 provider "aws" {
-  region     = "us-east-1"
-#  access_key = var.key_id
-#  secret_key = var.key_value
+  region = "us-east-1"
+  #  access_key = var.key_id
+  #  secret_key = var.key_value
 }
