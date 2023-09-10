@@ -1,6 +1,7 @@
 
 resource "aws_instance" "test_c6a_large_1" {
-  ami                    = "ami-053b0d53c279acc90" #Ubuntu
+  ami                    = "ami-0a0c8eebcdd6dcbd0" # ubuntu arm64 
+  # ami                  = "ami-053b0d53c279acc90" # Ubuntu amd64 (x86_64)
   instance_type          = "t4g.small"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
