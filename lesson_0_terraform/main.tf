@@ -48,8 +48,8 @@ resource "aws_security_group" "web-sg" {
 }
 
 resource "aws_instance" "test" {
-  ami                    = "ami-0715c1897453cabd1"
-  instance_type          = "t3.micro"
+  ami                    = "ami-0715c1897453cabd1" // OS Ubuntu 20.04
+  instance_type          = "t2.micro" //instance type
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   key_name               = "lesson_7_ansible"
   tags = {
@@ -71,6 +71,10 @@ resource "aws_instance" "test_powerfull" {
 output "web-address_test_instance" {
   value = aws_instance.test.public_dns
 }
+output "web-address_test_instance" {
+  value = aws_instance.test.public_ip
+}
+
 output "web-address_ansible_instance" {
   value = aws_instance.ansible_on_ubuntu.public_dns
 }
