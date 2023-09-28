@@ -55,10 +55,10 @@ resource "aws_instance" "test" {
   }
 }
 
-output "web-address_test_instance" {
+output "web-address_test_instance_public_dns" {
   value = aws_instance.test.public_dns
 }
-output "web-address_test_instance" {
+output "web-address_test_instance_public_ip" {
   value = aws_instance.test.public_ip
 }
 
