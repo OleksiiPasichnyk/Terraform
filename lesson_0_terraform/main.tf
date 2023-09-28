@@ -55,26 +55,11 @@ resource "aws_instance" "test" {
   }
 }
 
-resource "aws_instance" "test_powerfull" {
-  ami                    = "ami-0715c1897453cabd1"
-  instance_type          = "c6a.large"
-  vpc_security_group_ids = [aws_security_group.web-sg.id]
-  key_name               = "lesson_7_ansible"
-  tags = {
-    Name = "Test insta_Lesson_TF_Ansible"
-  }
-}
-
-
 output "web-address_test_instance" {
   value = aws_instance.test.public_dns
 }
 output "web-address_test_instance" {
   value = aws_instance.test.public_ip
-}
-
-output "web-address_ansible_instance" {
-  value = aws_instance.ansible_on_ubuntu.public_dns
 }
 
 data "aws_caller_identity" "current" {}
