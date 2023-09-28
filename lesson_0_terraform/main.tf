@@ -46,7 +46,7 @@ resource "aws_security_group" "web-sg" {
 }
 
 resource "aws_instance" "test" {
-  ami                    = "ami-0715c1897453cabd1" // OS Ubuntu 20.04
+  ami                    = "ami-0715c1897453cabd1" // AWS Linux
   instance_type          = "t2.micro" //instance type
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   # key_name               = "lesson_7_ansible"
