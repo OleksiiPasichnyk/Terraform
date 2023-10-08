@@ -18,8 +18,6 @@ terraform {
 }
 provider "aws" {
   region     = "us-east-1"
-  access_key = var.access_key
-  secret_key = var.secret_key
 }
 
 #resource "tls_private_key" "test_key" {
@@ -51,7 +49,7 @@ resource "aws_security_group" "web-sg" {
 }
 
 resource "aws_instance" "test" {
-  ami                    = "ami-0715c1897453cabd1" // AWS Linux
+  ami                    = "ami-053b0d53c279acc90" // Ubuntu server 22.04
   instance_type          = "t2.micro" //instance type
   vpc_security_group_ids = [aws_security_group.web-sg.id]
   # key_name               = "put your key name here"
