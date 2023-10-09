@@ -1,0 +1,48 @@
+---
+- name: Configure Apache Web Server on Ubuntu 22.04
+  hosts: all  # Replace with your server's hostname or IP address
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache web server
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start and enable Apache service
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Create a sample HTML file
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+      notify: Restart Apache
+
+    - name: Get external IP address using AWS metadata
+      command: "curl -s http://169.254.169.254/latest/meta-data/public-ipv4"
+      register: external_ip
+      changed_when: false  # Mark the task as non-changing
+
+    - name: Display external IP address
+      debug:
+        var: external_ip.stdout
+
+    - name: Add external IP to Apache website
+      lineinfile:
+        path: /var/www/html/index.html
+        line: "<p>External IP Address: {{ external_ip.stdout }}</p>"
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted

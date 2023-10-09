@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        canvas {
+            border: 1px solid #d3d3d3;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="200" height="100">
+    Your browser does not support the HTML canvas tag.
+</canvas>
+
+<script>
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    ctx.font = "30px Arial";
+    ctx.textAlign = "center"; // Center-align the text horizontally
+    ctx.fillText("Hello World", c.width / 2, 50);
+    ctx.fillText("From Oleksii", c.width / 2, 80);
+</script>
+
+</body>
+</html>
