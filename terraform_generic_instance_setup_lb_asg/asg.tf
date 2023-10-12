@@ -1,8 +1,8 @@
 
 resource "aws_launch_configuration" "as_conf" {
   name          = "asg_test_instance"
-  image_id      = "ami-053b0d53c279acc90" //Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
-  instance_type = "c6a.large"
+  image_id      = "ami-053b0d53c279acc90" //Ubuntu Server 20.04 LTS (HVM), SSD Volume Type // Amazon Machine Image e.g. [ami-053b0d53c279acc90]
+  instance_type = "c5.large"
   key_name      = "lesson_7_ansible"
   security_groups = [aws_security_group.web-sg.id]
 }
@@ -13,8 +13,8 @@ resource "aws_placement_group" "test_lesson_asg" {
 }
 
 
-resource "aws_autoscaling_group" "c6a_large" {
-  name                      = "c6a-terraform-test"
+resource "aws_autoscaling_group" "c5_large" {
+  name                      = "c5-terraform-test"
   max_size                  = 1
   min_size                  = 1
   desired_capacity          = 1
@@ -45,7 +45,7 @@ resource "aws_autoscaling_group" "c6a_large" {
 }
 
 resource "aws_autoscaling_policy" "cpu_policy" {
-  autoscaling_group_name = aws_autoscaling_group.c6a_large.name
+  autoscaling_group_name = aws_autoscaling_group.c5_large.name
   name                   = "cpu_bound"
   policy_type            = "TargetTrackingScaling"
   estimated_instance_warmup = 120
