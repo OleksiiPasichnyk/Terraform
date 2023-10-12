@@ -21,7 +21,7 @@ resource "aws_autoscaling_group" "c6a_large" {
   health_check_grace_period = 30
   health_check_type         = "EC2"
   force_delete              = true
-  placement_group           = aws_placement_group.test_asg.id
+  placement_group           = aws_placement_group.test_lesson_asg.id
   launch_configuration      = aws_launch_configuration.as_conf.name
   vpc_zone_identifier       = [for each in data.aws_subnets.vpcsubnets.ids : each]
 
