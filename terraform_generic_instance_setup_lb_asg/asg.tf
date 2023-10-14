@@ -13,8 +13,8 @@ resource "aws_placement_group" "test_lesson_asg" {
 }
 
 
-resource "aws_autoscaling_group" "c5_large" {
-  name                      = "c5-terraform-test"
+resource "aws_autoscaling_group" "c6a_large" {
+  name                      = "c6a-terraform-test"
   max_size                  = 1
   min_size                  = 1
   desired_capacity          = 1
