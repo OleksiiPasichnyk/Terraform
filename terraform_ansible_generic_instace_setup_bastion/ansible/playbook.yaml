@@ -1,0 +1,77 @@
+---
+- name: Update and install packages
+  hosts: all
+  become: true
+  become_method: sudo
+  vars:
+    required_packages:
+      - python3-pip
+      - python3
+      - nano
+      - git
+      - curl
+      - build-essential
+
+    homebrew_path: /usr/local/bin/brew
+    environment_path: /etc/environment
+    new_path: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+
+  tasks:
+    # Update and Install Packages
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ required_packages }}"
+    
+    # Install Ansible via Pip
+    - name: Install Ansible
+      pip:
+        name: ansible
+        state: present
+
+    # Homebrew Installation
+    - name: Check if Homebrew is already installed
+      stat:
+        path: "{{ homebrew_path }}"
+      register: brew
+
+    - name: Install Homebrew
+      become_user: ubuntu
+      script: install-homebrew.sh
+      when: not brew.stat.exists
+
+    # Update Environment
+    - name: Check if PATH already contains the new path
+      shell: grep -qF -- "{{ new_path }}" "{{ environment_path }}"
+      become_user: ubuntu
+      register: path_check
+      ignore_errors: yes
+
+    - name: Fetch the current PATH
+      shell: echo $PATH
+      register: current_path
+
+    - name: Ensure Homebrew is in PATH
+      become: true
+      lineinfile:
+        path: "{{ environment_path }}"
+        line: "PATH={{ new_path }}:{{ current_path.stdout }}"
+        create: yes
+      when: path_check.rc != 0
+
+    - name: Reload PATH
+      become_user: ubuntu
+      shell: source "{{ environment_path }}"
+      args:
+        executable: /bin/bash
+    - name: install tfenv
+      become_user: ubuntu
+      shell: brew install tfenv
+    - name: install terraform latest
+      become_user: ubuntu
+      shell: tfenv install latest && tfenv use latest
