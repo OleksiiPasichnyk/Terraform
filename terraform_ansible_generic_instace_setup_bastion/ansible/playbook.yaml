@@ -14,7 +14,7 @@
 
     homebrew_path: /usr/local/bin/brew
     environment_path: /etc/environment
-    new_path: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+    new_path: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin"
 
   tasks:
     # Update and Install Packages
@@ -69,9 +69,11 @@
       shell: source "{{ environment_path }}"
       args:
         executable: /bin/bash
+    
     - name: install tfenv
       become_user: ubuntu
       shell: brew install tfenv
+
     - name: install terraform latest
       become_user: ubuntu
       shell: tfenv install latest && tfenv use latest
