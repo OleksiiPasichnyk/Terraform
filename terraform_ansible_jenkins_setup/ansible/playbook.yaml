@@ -11,8 +11,6 @@
       - apt-transport-https
       - wget
       - gnupg2
-    jenkins_apt_key_url: https://pkg.jenkins.io/debian/jenkins.io.key
-    jenkins_apt_repo: "deb http://pkg.jenkins.io/debian-stable binary/"
 
   tasks:
     - name: Update apt cache
@@ -32,12 +30,13 @@
       loop: "{{ utils_packages }}"
 
     - name: Manually add Jenkins APT repository key
-      command: /bin/bash wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+      command: wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    - name: manuallyadd key for the repo
+      command: echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee  /etc/apt/sources.list.d/jenkins.list > /dev/null
     - name: Add Jenkins APT repository
       apt_repository:
-        repo: "{{ jenkins_apt_repo }}"
+        repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
         state: present
-
     - name: Update apt cache
       apt:
         update_cache: yes
