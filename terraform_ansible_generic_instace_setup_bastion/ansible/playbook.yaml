@@ -11,6 +11,7 @@
       - git
       - curl
       - build-essential
+      - awscli
 
     homebrew_path: /usr/local/bin/brew
     environment_path: /etc/environment
@@ -77,3 +78,14 @@
     - name: install terraform latest
       become_user: ubuntu
       shell: tfenv install latest && tfenv use latest
+    - name: install java  
+      become_user: ubuntu
+      shell: brew install openjdk@17
+
+    - name: install Jenkins 
+      become_user: ubuntu
+      shell: brew install jenkins-lts
+
+    - name: start Jenkins 
+      become_user: ubuntu
+      shell: brew services start jenkins-lts
