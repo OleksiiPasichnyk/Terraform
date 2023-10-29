@@ -1,6 +1,6 @@
 
-output "web-address_bastion" {
-  value = aws_instance.bastion_1.public_ip
+output "web-address-nodejs" {
+  value = aws_instance.nodejs-app.public_ip
 }
 
 output "account_id" {
