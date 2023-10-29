@@ -11,6 +11,7 @@
       - apt-transport-https
       - wget
       - gnupg2
+      - awscli
 
   tasks:
     - name: Update apt cache
