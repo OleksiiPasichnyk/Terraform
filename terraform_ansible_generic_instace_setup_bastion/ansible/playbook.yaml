@@ -67,9 +67,9 @@
 
     - name: Reload PATH
       become_user: ubuntu
-      shell: source "{{ environment_path }}" && echo $PATH
+      shell: . "{{ environment_path }}"
       when: path_check.rc != 0
-    
+
     - name: install tfenv
       become_user: ubuntu
       shell: brew install tfenv
