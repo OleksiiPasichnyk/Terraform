@@ -7,13 +7,13 @@ pipeline {
     stages {
         stage('Clone Git repo') {
             steps {
-                git(branch: 'main', url: 'https://github.com/OleksiiPasichnyk/Terraform.git', credentialsId: 'access_to_git')
+                git(branch: 'jenkins_instance_setup', url: 'https://github.com/OleksiiPasichnyk/Terraform.git', credentialsId: 'access_to_git')
             }
         }
         stage('Terraform Plan') {
             steps {
                 sh '''
-                cd ./terraform_ansible_generic_instace_setup_template
+                cd ./jenkins/terraform_ansible_generic_instace_setup_template
                 terraform init
                 terraform plan -out=terraform.tfplan
                 '''
@@ -27,7 +27,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh '''
-                cd ./terraform_ansible_generic_instace_setup_template
+                cd ./jenkins/terraform_ansible_generic_instace_setup_template
                 terraform apply terraform.tfplan
                 '''
             }
@@ -35,7 +35,7 @@ pipeline {
         stage('Get Terraform Outputs') {
             steps {
                 sh '''
-                cd ./terraform_ansible_generic_instace_setup_template
+                cd ./jenkins/terraform_ansible_generic_instace_setup_template
                 terraform output instance_ip > ./ansible/instance_ip.txt
                 '''
             }
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'access_for_new_node_js_app', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                    cd ./terraform_ansible_generic_instace_setup_template/ansible
+                    cd ./jenkins/terraform_ansible_generic_instace_setup_template/ansible
                     ansible-playbook -i instance_ip.txt playbook.yml --private-key=$SSH_KEY
                     '''
                 }
