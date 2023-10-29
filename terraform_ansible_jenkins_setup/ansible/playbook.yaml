@@ -60,3 +60,8 @@
         name: jenkins
         enabled: yes
         state: started
+        
+    - name: Install Ansible
+      pip:
+        name: ansible
+        state: present

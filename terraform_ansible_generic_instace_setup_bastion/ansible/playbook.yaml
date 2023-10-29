@@ -34,6 +34,9 @@
       pip:
         name: ansible
         state: present
+    - name: add ansible to path
+      become_user: ubuntu
+      shell: echo 'export PATH=$PATH:/home/ubuntu/.local/bin' >> /home/ubuntu/.bashrc
 
     # Homebrew Installation
     - name: Check if Homebrew is already installed
