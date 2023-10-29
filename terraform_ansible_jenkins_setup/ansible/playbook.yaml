@@ -8,10 +8,18 @@
     java_packages:
       - openjdk-11-jdk
     utils_packages:
+      - python3-pip
+      - python3
+      - nano
+      - git
+      - curl
       - apt-transport-https
       - wget
       - gnupg2
       - awscli
+      - tree
+      - unzip
+
 
   tasks:
     - name: Update apt cache
