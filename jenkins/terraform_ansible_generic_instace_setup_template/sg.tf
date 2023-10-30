@@ -1,6 +1,6 @@
 resource "random_pet" "sg" {}
 locals {
-  allowed_ingress_ports = [22, 3000]
+  allowed_ingress_ports = [22, 80, 443]
 }
 
 
