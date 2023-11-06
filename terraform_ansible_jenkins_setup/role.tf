@@ -1,4 +1,3 @@
-
 # Create IAM role for Jenkins
 resource "aws_iam_instance_profile" "jenkins_profile" {
   name = "jenkins_profile"
