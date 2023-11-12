@@ -1,5 +1,10 @@
 FROM jenkins/jenkins:2.401.2-jdk17
+# Set the environment variable for JENKINS_HOME
+# Replace /var/jenkins_home with the directory you wish to use
+ENV JENKINS_HOME /var/jenkins_home
+# Create the Jenkins home directory
 USER root
+RUN mkdir -p $JENKINS_HOME && chown -R jenkins:jenkins $JENKINS_HOME
 RUN apt-get update && apt-get install -y lsb-release
 RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
   https://download.docker.com/linux/debian/gpg

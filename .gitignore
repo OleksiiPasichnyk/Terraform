@@ -4,3 +4,4 @@ variables.tf
 hosts.yml
 ansible_inventory.ini
 .DS_Store
+/Docker/docker_jenkins/jenkins
