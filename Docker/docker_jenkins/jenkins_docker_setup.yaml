@@ -2,9 +2,9 @@ version: "3"
 services:
   jenkins:
     container_name: jenkins
-    image: jenkins_with_docker:latest
+    image: jenkins_with_docker:v5
     volumes:
-     - '/home/axelp/personal/DevOps/lessons/Docker/docker_jenkins/jenkins:/var/jenkins_home:rw'
+     - '/home/axelp/personal/DevOps/lessons/Docker/docker_jenkins/jenkins/var/lib/jenkins:/var/jenkins_home:rw'
     ports:
     - 8080:8080
     - 8090:8090
