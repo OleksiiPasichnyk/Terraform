@@ -1,0 +1,14 @@
+version: "3"
+services:
+  lamina1:
+    container_name: lamina1
+    image:   inoutik/lamina1:0.1.45
+    restart: "no"
+    networks:
+      - lamina1
+    ports:
+    - 9671:9671
+    - 9650:9650
+networks:
+  lamina1:
+    external: true
