@@ -5,7 +5,10 @@ services:
     ports:
       - "8080:8080"  # Map port 8080 of the container to port 8080 on the host
     environment:
-      - NODE_ENV=production
+    - MONGO_SERVICE_HOST: mongo.service
+    - MONGO_AUTH_USER: pacman
+    - MONGO_AUTH_PWD: pacman
+    - MONGO_DATABASE: pacman
     restart: unless-stopped
   mongo:
     image: mongo
@@ -13,6 +16,22 @@ services:
       - "27017:27017" # Expose MongoDB on port 27017
     volumes:
       - mongo-db:/mnt/data/db
+      - name: mongo-initdb
+        mountPath: /docker-entrypoint-initdb.d
 volumes:
   mongo-db:
     driver: local
+  mongo-initdb:
+    data:
+    setup.sh: |
+      #!/bin/bash
+      set -e
+  
+      mongo -- "$MONGO_INITDB_DATABASE" <<EOF
+          db.createUser({user: "pacman", pwd: "pacman", roles: [{role: "readWrite", db: "admin" }]});
+          use pacman;
+          db.createCollection("init");
+          db.init.insert({name: "init"});
+          db.init.find();
+          db.createUser({user: "pacman", pwd: "pacman", roles: [{role: "readWrite", db: "pacman" }]});
+      EOF
