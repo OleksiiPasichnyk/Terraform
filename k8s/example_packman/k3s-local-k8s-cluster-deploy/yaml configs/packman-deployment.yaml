@@ -1,11 +1,3 @@
-# Namespace Definition
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: pacman
-
----
-
 # Ingress Definition
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -81,10 +73,6 @@ spec:
             - name: http-server
               containerPort: 8080
           env:
-            - name: NODE_ENV
-              value: "production"
-            - name: PORT
-              value: "8080"
             - name: MONGO_SERVICE_HOST
               value: "mongo.pacman.svc.cluster.local"
             - name: MONGO_AUTH_USER
@@ -92,7 +80,5 @@ spec:
             - name: MONGO_AUTH_PWD
               value: "pacman"
             - name: MONGO_DATABASE
-              value: "pacman"
-            - name: MONGO_COLLECTION 
               value: "pacman"
             # Additional environment variables can be added here as required
