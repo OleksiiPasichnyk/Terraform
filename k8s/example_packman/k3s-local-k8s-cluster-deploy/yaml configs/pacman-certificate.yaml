@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pacman.paxel.ca
+  namespace: pacman
+spec:
+  secretName: pacman.paxel.ca-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: pacman.paxel.ca
+  dnsNames:
+  - pacman.paxel.ca
