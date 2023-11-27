@@ -1,0 +1,52 @@
+# Service Definition for Pac-Man Application
+apiVersion: v1
+kind: Service
+metadata:
+  name: pac-man
+  namespace: pacman
+  labels:
+    name: pac-man
+spec:
+  selector:
+    name: pac-man
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
+
+---
+
+# Deployment Definition for Pac-Man Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pac-man
+  namespace: pacman
+  labels:
+    name: pac-man
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pac-man
+  template:
+    metadata:
+      labels:
+        name: pac-man
+    spec:
+      containers:
+        - name: pac-man
+          image: docker.io/jessehoch/pacman-nodejs-app:latest
+          ports:
+            - name: http-server
+              containerPort: 8080
+          env:
+            - name: MONGO_SERVICE_HOST
+              value: "mongo.pacman.svc.cluster.local"
+            - name: MONGO_AUTH_USER
+              value: "pacman"
+            - name: MONGO_AUTH_PWD
+              value: "pacman"
+            - name: MONGO_DATABASE
+              value: "pacman"
