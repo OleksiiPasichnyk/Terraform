@@ -93,7 +93,7 @@
             nodejs-app:
               image: jessehoch/pacman-nodejs-app:latest
               ports:
-                - "8080:80"  # Map port 8080 of the container to port 8080 on the host
+                - "80:8080"  # Map port 8080 of the container to port 8080 on the host
               environment:
                 MONGO_SERVICE_HOST: mongo
                 MONGO_AUTH_USER: pacman

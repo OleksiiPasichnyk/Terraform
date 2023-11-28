@@ -1,6 +1,6 @@
 resource "random_pet" "sg" {}
 locals {
-  allowed_ingress_ports = [22, 80, 443]
+  allowed_ingress_ports = [22, 80,8080, 443]
 }
 
 
@@ -17,8 +17,8 @@ dynamic "ingress" {
     }
   }
   egress {
-    from_port   = 80
-    to_port     = 443
+    from_port   = 0
+    to_port     = 65000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
