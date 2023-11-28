@@ -65,7 +65,7 @@ pipeline {
             steps {
                 sh '''
                 cd ./projects/pacman-deployed-with-jenkins/terraform
-                terraform output web-address-nodejs > ../ansible/instance_ip.txt
+                terraform output web-address-nodejs > ../ansible-playbook/instance_ip.txt
                 '''
             }
         }
@@ -75,7 +75,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'access_for_new_node_js_app', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
                     sleep 180
-                    cd ./projects/pacman-deployed-with-jenkins/ansible
+                    cd ./projects/pacman-deployed-with-jenkins/ansible-playbook
                     ansible-playbook -i instance_ip.txt playbook_apache.yaml -u ubuntu --private-key=$SSH_KEY -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
                     '''
                 }
