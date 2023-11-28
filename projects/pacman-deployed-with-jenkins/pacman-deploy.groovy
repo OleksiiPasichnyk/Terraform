@@ -76,7 +76,7 @@ pipeline {
                     sh '''
                     sleep 180
                     cd ./projects/pacman-deployed-with-jenkins/ansible-playbook
-                    ansible-playbook -i instance_ip.txt playbook_apache.yaml -u ubuntu --private-key=$SSH_KEY -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
+                    ansible-playbook -i instance_ip.txt instance-docker-setup.yaml -u ubuntu --private-key=$SSH_KEY -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
                     '''
                 }
             }
