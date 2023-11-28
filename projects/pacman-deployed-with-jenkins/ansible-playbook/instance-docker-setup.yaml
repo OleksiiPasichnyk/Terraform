@@ -1,0 +1,100 @@
+---
+- name: Install Docker, Docker Compose, and Start Pacman App
+  hosts: all
+  become: yes
+  vars:
+    non_root_user: ubuntu  # Replace with your non-root username
+  tasks:
+    # [Previous tasks to install Docker]
+    - name: Update apt and install dependencies
+      apt:
+        update_cache: yes
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker’s official GPG key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        update_cache: yes
+        name: docker-ce
+        state: present
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Add non-root user to Docker group
+      user:
+        name: "{{ non_root_user }}"
+        group: docker
+        append: yes
+
+    - name: Create MongoDB init script
+      copy:
+        dest: "/home/{{ non_root_user }}/mongo-init-db/init-mongo.js"
+        content: |
+          db.getSiblingDB('admin').createUser({
+              user: "admin",
+              pwd: "adminPassword",  // Replace with a secure password
+              roles: [{ role: "userAdminAnyDatabase", db: "admin" }]
+          });
+
+          db.getSiblingDB('pacman').createUser({
+              user: "pacman",
+              pwd: "pacman",  // Replace with a secure password
+              roles: [{ role: "readWrite", db: "pacman" }]
+          });
+
+          db.getSiblingDB('pacman').createCollection("init");
+          db.getSiblingDB('pacman').init.insert({name: "init"});
+
+    - name: Create Docker Compose file for Pacman
+      copy:
+        dest: "/home/{{ non_root_user }}/docker-compose.yml"
+        content: |
+          version: '3'
+          services:
+            nodejs-app:
+              image: jessehoch/pacman-nodejs-app:latest
+              ports:
+                - "8080:80"
+              environment:
+                MONGO_SERVICE_HOST: mongo
+                MONGO_AUTH_USER: pacman
+                MONGO_AUTH_PWD: pacman
+                MONGO_DATABASE: pacman
+              restart: unless-stopped
+            mongo:
+              image: mongo:4.0.4
+              ports:
+                - "27017:27017"
+              volumes:
+                - mongo-db:/data/db
+                - /home/{{ non_root_user }}/mongo-init-db:/docker-entrypoint-initdb.d
+              restart: unless-stopped
+          volumes:
+            mongo-db:
+              driver: local
+          networks:
+            default:
+              external:
+                name: pacman-network
+
+    - name: Start Pacman App using Docker Compose
+      become: no
+      become_user: "{{ non_root_user }}"
+      command: docker-compose -f /home/{{ non_root_user }}/docker-compose.yml up -d
