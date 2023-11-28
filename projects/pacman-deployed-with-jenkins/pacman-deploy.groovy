@@ -74,7 +74,7 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'access_for_new_node_js_app', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                    sleep 180
+                    sleep 120
                     cd ./projects/pacman-deployed-with-jenkins/ansible-playbook
                     ansible-playbook -i instance_ip.txt instance-docker-setup.yaml -u ubuntu --private-key=$SSH_KEY -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
                     '''
