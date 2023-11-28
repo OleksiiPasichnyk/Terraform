@@ -5,23 +5,19 @@ pipeline {
     }
 
     stages {
-
         stage('Sparse Checkout') {
             steps {
                 script {
-                    // Define the repository URL
-                    def repoUrl = 'https://github.com/OleksiiPasichnyk/Terraform.git'
-
-                    // Define the directory to checkout
-                    def sparseCheckoutPaths = 'projects/pacman-deployed-with-jenkins'
-
-                    // Checkout command
                     checkout([$class: 'GitSCM', 
-                              branches: [[name: '*/main']],
+                              branches: [[name: 'main']],
                               doGenerateSubmoduleConfigurations: false,
-                              extensions: [[$class: 'SparseCheckoutPaths',
-                                            sparseCheckoutPaths: sparseCheckoutPaths]],
-                              userRemoteConfigs: [[url: repoUrl]]
+                              extensions: [[
+                                  $class: 'SparseCheckoutPaths', 
+                                  sparseCheckoutPaths: [[path: 'projects/pacman-deployed-with-jenkins']]
+                              ]],
+                              userRemoteConfigs: [[
+                                  url: 'https://github.com/OleksiiPasichnyk/Terraform.git'
+                              ]]
                     ])
                 }
             }
@@ -36,11 +32,13 @@ pipeline {
                 '''
             }
         }
-        stage('Plan verification and user input for Destroy') {
+
+        stage('Review Destroy Plan') {
             steps {
-                input message: 'proceed or abort?', ok: 'ok'
+                input message: 'Review the destroy plan. Proceed with destruction?', ok: 'Proceed'
             }
         }
+
         stage('Terraform Apply Destroy') {
             steps {
                 sh '''

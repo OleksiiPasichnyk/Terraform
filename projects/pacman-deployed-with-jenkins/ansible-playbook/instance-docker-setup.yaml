@@ -5,8 +5,39 @@
   vars:
     non_root_user: ubuntu  # Replace with your non-root username
   tasks:
-    # [Previous tasks to install Docker and dependencies]
 
+    - name: Update apt and install dependencies
+      apt:
+        update_cache: yes
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker’s official GPG key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        update_cache: yes
+        name: docker-ce
+        state: present
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+  
     - name: Install Docker Compose
       apt:
         name: docker-compose
@@ -62,7 +93,7 @@
             nodejs-app:
               image: jessehoch/pacman-nodejs-app:latest
               ports:
-                - "8080:8080"  # Map port 8080 of the container to port 8080 on the host
+                - "8080:80"  # Map port 8080 of the container to port 8080 on the host
               environment:
                 MONGO_SERVICE_HOST: mongo
                 MONGO_AUTH_USER: pacman
