@@ -95,4 +95,4 @@
     - name: Start Pacman App using Docker Compose
       become: no
       become_user: "{{ non_root_user }}"
-      command: docker-compose -f /home/{{ non_root_user }}/docker-compose.yml up -d
+      command: docker-compose -f /home/{{ non_root_user }}/pacman/docker-compose.yml up -d
