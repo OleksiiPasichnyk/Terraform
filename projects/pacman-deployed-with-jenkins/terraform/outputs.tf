@@ -1,6 +1,6 @@
 
 output "web-address-nodejs" {
-  value = aws_instance.nodejs-app.public_ip
+  value = aws_instance.pacman-nodejs-app.public_ip
 }
 
 output "account_id" {

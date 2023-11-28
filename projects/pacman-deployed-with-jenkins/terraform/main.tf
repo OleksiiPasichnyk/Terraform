@@ -13,7 +13,7 @@ terraform {
   required_version = ">= 1.3"
    backend "s3" {
      bucket = "terraform-state-test-my-cloud" # modify this to your bucket name
-     key    = "nodejsapp_example/terraform.tfstate" # modify this to your key name
+     key    = "pacman/terraform.tfstate" # modify this to your key name
      region = "us-east-1" # modify this to your region
    }
 }
