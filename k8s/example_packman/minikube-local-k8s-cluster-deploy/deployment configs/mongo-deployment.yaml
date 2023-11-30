@@ -86,8 +86,8 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: local-pv
-  storageClassName: ""
+  storageClassName: standard  # Use the 'standard' StorageClass provided by Minikube
+
 
 ---
 apiVersion: v1
@@ -100,6 +100,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/home/axelp/personal/DevOps/lessons/k8s/example_packman/minikube-local-k8s-cluster-deploy/mongo-data"  # Update this path based on your Minikube mount
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
+    path: "/data/mongo"  # A path that is accessible in Minikube
+  persistentVolumeReclaimPolicy: Retain  # Set to 'Delete' to not retain data
+  storageClassName: standard  # Use the 'standard' StorageClass provided by Minikube
+
