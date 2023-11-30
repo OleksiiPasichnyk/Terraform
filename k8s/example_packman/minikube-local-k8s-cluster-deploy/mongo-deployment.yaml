@@ -86,14 +86,13 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: standard  # Use the 'standard' StorageClass provided by Minikube
-
-
+  storageClassName: standard
+  volumeName: local-pv-mongo # Use the 'standard' StorageClass provided by Minikube
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: local-pv
+  name: local-pv-mongo
 spec:
   capacity:
     storage: 1Gi
