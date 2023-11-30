@@ -8,7 +8,7 @@ Follow these steps to set up and run Pacman on a Minikube cluster:
 Ensure you are in the proper Kubernetes cluster:
 
 3. **Set Kubernetes Namespace**
-Make sure you are using the proper namespace (default):
+Make sure you are using the proper namespace (pacman):
 
 4. **Deploy MongoDB**
 Apply the MongoDB deployment and check the pod logs:
