@@ -1,0 +1,102 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: web-clicker
+  name: web-clicker-ingress
+  annotations:
+    # nginx.ingress.kubernetes.io/auth-type: basic
+    # nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"  # Enforce HTTPS redirection
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: web-clicker.paxel.ca
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-clicker
+                port:
+                  number: 80
+  tls:  # TLS configuration
+    - hosts:
+        - web-clicker.paxel.ca
+      secretName: web-clicker.paxel.ca-tls # Secret containing the TLS certificate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-clicker
+  namespace: web-clicker
+  labels:
+    name: web-clicker
+spec:
+  selector:
+    name: web-clicker-deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-clicker-deployment
+  namespace: web-clicker
+  labels:
+    name: web-clicker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: web-clicker-deployment
+  template:
+    metadata:
+      labels:
+        name: web-clicker-deployment
+    spec:
+      imagePullSecrets:
+      - name: dockerhubaccess
+      containers:
+        - name: web-clicker
+          image: oleksiipasichnyk/confl:webfront_v2
+          ports:
+            - name: http-server
+              containerPort: 80
+          env:
+            - name: API_URL
+              value: "http://api-backend:80"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-clicker-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-clicker-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: web-clicker.paxel.ca
+  namespace: web-clicker
+spec:
+  secretName: web-clicker.paxel.ca-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: web-clicker.paxel.ca
+  dnsNames:
+  - web-clicker.paxel.ca

@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # URL of the external API
-API_URL = "http://apiserver:7001"
+API_URL = "http://api-backend:80"
 
 
 def get_current_time():
