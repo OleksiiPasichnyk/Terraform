@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Info</title>
+    <style>
+        body {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        table {
+            margin: auto;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 5px;
+        }
+        td label {
+            text-align: right;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<form id="form1" action="/form_submit" method="post">
+    <table>
+        <tr class="form-group">
+            <td><label for="name">Name:</label></td>
+            <td><input type="text" id="name" name="name" placeholder="Name"></td>
+        </tr>
+        <tr class="form-group">
+            <td><label for="profession">Profession:</label></td>
+            <td><input type="text" id="profession" name="profession" placeholder="Profession"></td>
+        </tr>
+    </table>
+    <p>After submission, information will be sent to the API server, located in different container</p>
+    <button id="submit" type="submit">Submit</button>
+</form>
+</body>
+</html>

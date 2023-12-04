@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  apiserver:
+    build: ./apiserver
+    networks:
+      - backend-network
+
+  webfront:
+    build: webfront
+    ports:
+      - "80:80"
+    networks:
+      - backend-network
+      - client-network
+    depends_on:
+      - apiserver
+
+  clicker:
+    build: ./clicker
+    networks:
+      - client-network
+    depends_on:
+      - webfront
+
+networks:
+  backend-network:
+  client-network:

@@ -75,6 +75,9 @@
 
           db.getSiblingDB('pacman').createCollection("init");
           db.getSiblingDB('pacman').init.insert({name: "init"});
+      mode: '0755'
+      owner: "{{ non_root_user }}"
+      group: "{{ non_root_user }}"
 
     - name: Ensure Docker Compose file directory exists
       file:
@@ -122,6 +125,10 @@
             default:
               external:
                 name: pacman-network
+      mode: '0755'
+      owner: "{{ non_root_user }}"
+      group: "{{ non_root_user }}"
+      
     - name: Create Docker network
       docker_network:
         name: pacman-network
