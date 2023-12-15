@@ -1,31 +1,31 @@
-# Ingress Definition
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: pacman
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: pacman.paxel.ca
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pac-man
-                port:
-                  number: 8080
-  tls:
-    - hosts:
-        - pacman.paxel.ca
-      secretName: pacman.paxel.ca-tls
+# # Ingress Definition
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: pacman
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+#     nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+#     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+#     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#     - host: pacman.paxel.ca
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: pac-man
+#                 port:
+#                   number: 8080
+#   tls:
+#     - hosts:
+#         - pacman.paxel.ca
+#       secretName: pacman.paxel.ca-tls
 
 ---
 
