@@ -55,7 +55,6 @@
         state: directory
         owner: "{{ non_root_user }}"
         group: "{{ non_root_user }}"
-        mode: '0755'
 
     - name: Create MongoDB init script
       copy:
