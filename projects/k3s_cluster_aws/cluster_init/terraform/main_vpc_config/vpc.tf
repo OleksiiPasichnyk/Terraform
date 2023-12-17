@@ -1,3 +1,35 @@
+# resource "aws_vpc_peering_connection" "k3s_vpc_peering" {
+#   peer_vpc_id = var.peer_vpc_id  # Replace with actual VPC ID
+#   vpc_id      = aws_vpc.k3s_vpc.id
+#   auto_accept = false  # Set to true if peering with your own account
+# 
+#   tags = {
+#     Name = "K3s_VPC_Peering"
+#   }
+# }
+# 
+# resource "aws_vpc_peering_connection_accepter" "k3s_vpc_peering_accepter" {
+#   vpc_peering_connection_id = aws_vpc_peering_connection.k3s_vpc_peering.id
+#   auto_accept               = true
+# 
+#   tags = {
+#     Name = "K3s_VPC_Peering_Accepter"
+#   }
+# }
+# 
+# resource "aws_route" "k3s_vpc_peering_route_to_peer" {
+#   route_table_id            = aws_route_table.k3s_public_route_table.id
+#   destination_cidr_block    = var.peer_vpc_cidr  # Replace with the CIDR block of the peer VPC
+#   vpc_peering_connection_id = aws_vpc_peering_connection.k3s_vpc_peering.id
+# }
+# 
+# resource "aws_route" "k3s_vpc_peering_route_from_peer" {
+#   route_table_id            = aws_route_table.k3s_private_route_table.id
+#   destination_cidr_block    = var.peer_vpc_cidr  # Replace with the CIDR block of the peer VPC
+#   vpc_peering_connection_id = aws_vpc_peering_connection.k3s_vpc_peering.id
+# }
+
+
 resource "aws_vpc" "k3s_vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
