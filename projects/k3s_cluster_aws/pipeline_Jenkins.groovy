@@ -74,20 +74,12 @@ pipeline {
                 sh '''
                 cd ./projects/k3s_cluster_aws/cluster_init/terraform/master_node_config
                 terraform apply -input=false terraform.tfplan
+                terraform output k3s_master_private_ip > ../../ansible/master_ip.txt
                 '''
             }
         }
 
-        stage('Get Terraform Outputs') {
-            steps {
-                sh '''
-                cd ./projects/pacman-deployed-with-jenkins/terraform
-                terraform output web-address-nodejs > ../ansible-playbook/instance_ip.txt
-                '''
-            }
-        }
-
-        stage('Terraform Plan master creation') {
+        stage('Terraform Plan worker creation') {
             steps {
                 sh '''
                 cd ./projects/k3s_cluster_aws/cluster_init/terraform/worker_node_config
@@ -111,6 +103,30 @@ pipeline {
                 sh '''
                 cd ./projects/k3s_cluster_aws/cluster_init/terraform/worker_node_config
                 terraform apply -input=false terraform.tfplan
+                terraform output k3s_master_private_ip > ../../ansible/worker_ip.txt
+                '''
+            }
+        }
+        stage('Install Ansible') {
+            steps {
+                sh '''
+                sudo apt-add-repository ppa:ansible/ansible -y
+                sudo apt-get update
+                sudo apt-get install ansible -y
+                '''
+            }
+        }
+        stage('Run Ansible') {
+            steps {
+                sh '''
+                cd ./projects/k3s_cluster_aws/cluster_init/ansible
+                ansible-playbook -i master_ip.txt master_setup.yml
+                '''
+            }
+            steps {
+                sh '''
+                cd ./projects/k3s_cluster_aws/cluster_init/ansible
+                ansible-playbook -i worker_ip.txt worker_setup.yml
                 '''
             }
         }

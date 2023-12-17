@@ -3,7 +3,7 @@ resource "aws_autoscaling_group" "k3s_worker_asg" {
     id      = aws_launch_template.k3s_worker.id
     version = "$Latest"
   }
-
+  name = "K3S Worker ASG"
   min_size            = 2
   max_size            = 2
   desired_capacity    = 2

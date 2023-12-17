@@ -1,0 +1,21 @@
+- name: Launch Worker Node
+  hosts: all
+  become: true
+  vars:
+    non_root_user: ubuntu  # Replace with your non-root username
+    master_ip: "{{ lookup('file', 'master_ip.txt') | trim }}" #pull master ip from terraform output
+  tasks:
+
+    - name: Update apt and install dependencies
+      apt:
+        update_cache: yes
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+    - name: Start k3s worker node
+      shell: curl -sfL https://get.k3s.io | sh -s - agent K3S_URL=https://${{master_ip}}:6443 K3S_TOKEN=u2Qw5PbXC887MMv85LeG
+      args:
+        chdir: /tmp
+        creates: /etc/systemd/system/k3s.service

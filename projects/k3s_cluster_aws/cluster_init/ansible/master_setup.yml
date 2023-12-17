@@ -1,0 +1,33 @@
+- name: Launch Master Node
+  hosts: all
+  become: true
+  vars:
+    non_root_user: ubuntu  # Replace with your non-root username
+    master_ip: "{{ lookup('file', 'master_ip.txt') | trim }}"
+  tasks:
+
+    - name: Update apt and install dependencies
+      apt:
+        update_cache: yes
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+
+    - name: Start k3s master node
+      shell: curl -sfL https://get.k3s.io | sh -s - server --token u2Qw5PbXC887MMv85LeG INSTALL_K3S_EXEC="--tls-san {{ master_ip }}" 
+      args:
+        chdir: /tmp
+        creates: /etc/systemd/system/k3s.service
+
+    - name: Copy kubeconfig to non-root user's home directory
+      copy:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: /home/{{ non_root_user }}/.kube/config
+        owner: "{{ non_root_user }}"
+        group: "{{ non_root_user }}"
+        mode: 0600
+
+    - name: Show kubeconfig file
+      shell: cat /home/{{ non_root_user }}/.kube/config
