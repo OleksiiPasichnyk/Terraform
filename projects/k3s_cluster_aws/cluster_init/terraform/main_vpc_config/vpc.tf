@@ -76,11 +76,6 @@ resource "aws_route_table" "k3s_public_route_table" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.k3s_igw.id
   }
-  
-  route {
-    cidr_block = data.aws_vpc.default.cidr_block
-    gateway_id = aws_vpc_peering_connection.k3s_vpc_peering.id
-  }
 
   tags = {
     Name = "K3s_Public_Route_Table"
