@@ -9,6 +9,10 @@ resource "aws_security_group" "k3s_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    protocol    = "ICMP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port   = 80
