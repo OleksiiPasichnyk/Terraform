@@ -16,10 +16,10 @@
           - software-properties-common
 
     - name: Start k3s master node
-      shell: curl -sfL https://get.k3s.io | sh -s - server --token u2Qw5PbXC887MMv85LeG INSTALL_K3S_EXEC="--tls-san {{ master_ip }}" 
-      args:
-        chdir: /tmp
-        creates: /etc/systemd/system/k3s.service
+      shell: |
+        curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --tls-san {{ master_ip }}" sh -s - --token u2Qw5PbXC887MMv85LeG
+      chdir: /tmp
+      creates: /etc/systemd/system/k3s.service
 
     - name: Copy kubeconfig to non-root user's home directory
       copy:
