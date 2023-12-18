@@ -100,6 +100,11 @@ resource "aws_route_table" "k3s_private_route_table" {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.k3s_nat_gateway.id
   }
+  
+  route {
+    cidr_block                = data.aws_vpc.default.cidr_block
+    vpc_peering_connection_id = aws_vpc_peering_connection.k3s_vpc_peering.id
+  }
 
   tags = {
     Name = "K3s_Private_Route_Table"
