@@ -64,14 +64,33 @@ resource "aws_vpc_peering_connection" "k3s_vpc_peering" {
   }
 }
 
-# Create a Combined Route Table for Public and Private Subnets
-resource "aws_route_table" "k3s_combined_route_table" {
+# Public Route Table
+resource "aws_route_table" "k3s_public_route_table" {
   vpc_id = aws_vpc.k3s_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.k3s_igw.id
   }
+
+  route {
+    cidr_block                = data.aws_vpc.default.cidr_block
+    vpc_peering_connection_id = aws_vpc_peering_connection.k3s_vpc_peering.id
+  }
+
+  tags = {
+    Name = "K3s_Public_Route_Table"
+  }
+}
+
+resource "aws_route_table_association" "k3s_public_subnet_association" {
+  subnet_id      = aws_subnet.k3s_public_subnet.id
+  route_table_id = aws_route_table.k3s_public_route_table.id
+}
+
+# Private Route Table
+resource "aws_route_table" "k3s_private_route_table" {
+  vpc_id = aws_vpc.k3s_vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -84,18 +103,11 @@ resource "aws_route_table" "k3s_combined_route_table" {
   }
 
   tags = {
-    Name = "K3s_Combined_Route_Table"
+    Name = "K3s_Private_Route_Table"
   }
 }
 
-# Associate the Combined Route Table with the Public Subnet
-resource "aws_route_table_association" "k3s_public_subnet_association" {
-  subnet_id      = aws_subnet.k3s_public_subnet.id
-  route_table_id = aws_route_table.k3s_combined_route_table.id
-}
-
-# Associate the Combined Route Table with the Private Subnet
 resource "aws_route_table_association" "k3s_private_subnet_association" {
   subnet_id      = aws_subnet.k3s_private_subnet.id
-  route_table_id = aws_route_table.k3s_combined_route_table.id
-}
+  route_table_id = aws_route_table.k3s_private_route_table.id
+}# Data source for default VPC (used for VPC peeringdata "aws_vpc" "default"   default = tru
