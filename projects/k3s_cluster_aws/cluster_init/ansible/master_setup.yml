@@ -3,7 +3,7 @@
   become: true
   vars:
     non_root_user: ubuntu  # Replace with your non-root username
-    master_ip: "{{ lookup('file', 'master_ip_public.txt') | trim }}"
+    master_ip_public: "{{ lookup('file', 'master_ip_public.txt') | trim }}"
   tasks:
 
     - name: Update apt and install dependencies
