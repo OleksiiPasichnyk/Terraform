@@ -99,6 +99,7 @@ pipeline {
                 sh '''
                 cd ./projects/k3s_cluster_aws/cluster_init/terraform/worker_node_config
                 terraform apply -input=false terraform.tfplan
+                sleep 0
                 terraform output -json k3s_workers_instance_private_ip | jq -r '.[]' > ../../ansible/worker_ip.txt
                 '''
             }
