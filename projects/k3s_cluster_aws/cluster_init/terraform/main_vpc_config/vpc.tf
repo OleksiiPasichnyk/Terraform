@@ -99,8 +99,3 @@ resource "aws_route_table_association" "k3s_private_subnet_association" {
   subnet_id      = aws_subnet.k3s_private_subnet.id
   route_table_id = aws_route_table.k3s_combined_route_table.id
 }
-
-# Data source for default VPC (used for VPC peering)
-data "aws_vpc" "default" {
-  default = true
-}
