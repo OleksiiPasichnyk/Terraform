@@ -22,6 +22,7 @@
         chdir: /tmp
         creates: /etc/systemd/system/k3s.service
     - name: Copy kubeconfig to non-root user's home directory
+      become: true
       copy:
         src: /etc/rancher/k3s/k3s.yaml
         dest: /home/{{ non_root_user }}/.kube/config
