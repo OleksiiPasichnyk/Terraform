@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: crmclient
-        image: "134790923575.dkr.ecr.us-east-1.amazonaws.com/kompot-fe:latest"
+        image: "crmclient:v1"
         imagePullPolicy: Never
         ports:
         - containerPort: 8000

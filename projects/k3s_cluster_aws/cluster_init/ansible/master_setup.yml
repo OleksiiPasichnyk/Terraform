@@ -28,4 +28,4 @@
 
     - name: Print kubeconfig content
       debug:
-        msg: "{{ kubeconfig_content.stdout }}"
+        msg: "{{ kubeconfig_content.stdout | from_json | to_nice_yaml }}"
