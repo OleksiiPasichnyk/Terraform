@@ -133,5 +133,5 @@ resource "aws_route_table_association" "k3s_private_subnet_association" {
 resource "aws_route_table_association" "default_back_to_k3s_peering" {
   for_each       = toset(data.aws_subnets.default.ids)
   subnet_id      = each.value
-  route_table_id = aws_route_table.k3s_private_route_table.id
+  route_table_id = aws_route_table.default_back_to_k3s_peering.id
 }
