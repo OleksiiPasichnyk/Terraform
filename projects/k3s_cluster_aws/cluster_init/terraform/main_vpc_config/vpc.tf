@@ -108,7 +108,7 @@ resource "aws_route_table" "k3s_private_route_table" {
 }
 
 resource "aws_route_table" "default_back_to_k3s_peering" {
-  vpc_id = data.aws_vpc.defaul.id
+  vpc_id = data.aws_vpc.default.id
 
   route {
     cidr_block     = aws_vpc.k3s_vpc.cidr_block
