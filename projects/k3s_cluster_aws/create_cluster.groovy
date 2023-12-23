@@ -107,7 +107,7 @@ pipeline {
                 sh '''
                 cd ./projects/k3s_cluster_aws/cluster_init/terraform/worker_node_config
                 terraform apply -input=false terraform.tfplan
-                sleep 0
+                sleep 60
                 terraform output -json k3s_workers_instance_private_ip | jq -r '.[]' > ../../ansible/worker_ip.txt
                 '''
             }
@@ -118,7 +118,6 @@ pipeline {
                 sudo apt-add-repository ppa:ansible/ansible -y
                 sudo apt-get update
                 sudo apt-get install ansible -y
-                sudo apt-get install jq -y
                 '''
             }
         }
