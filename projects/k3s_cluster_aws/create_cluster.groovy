@@ -24,6 +24,14 @@ pipeline {
                     ])
                 }
             }
+        }   
+        stage('Install JQ') {
+            steps {
+                sh '''
+                sudo apt-get update
+                sudo apt-get install jq -y
+                '''
+            }
         }
         stage('Terraform Plan - Main VPC') {
             steps {
@@ -110,6 +118,7 @@ pipeline {
                 sudo apt-add-repository ppa:ansible/ansible -y
                 sudo apt-get update
                 sudo apt-get install ansible -y
+                sudo apt-get install jq -y
                 '''
             }
         }
