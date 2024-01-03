@@ -11,7 +11,7 @@ resource "aws_iam_role" "k3s_node_role" {
         Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
-          Service = "EC2"
+          Service = "ec2.amazonaws.com"
         }
       },
     ]
