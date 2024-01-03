@@ -1,5 +1,8 @@
 resource "aws_iam_role" "k3s_node_role" {
   name = "k3s_node_role"
+  tags = {
+    Name = "K3s_Node_Role"
+  }
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -8,7 +11,7 @@ resource "aws_iam_role" "k3s_node_role" {
         Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
-          Service = "ec2.amazonaws.com"
+          Service = "EC2"
         }
       },
     ]
