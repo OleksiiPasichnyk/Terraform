@@ -25,7 +25,7 @@ data "aws_instances" "asg_instances" {
   }
 }
 
-data "aws_iam_instance_profile" "k3s_node_role" {
+data "aws_iam_role" "k3s_node_role" {
   name = "k3s_node_role"
 }
 
