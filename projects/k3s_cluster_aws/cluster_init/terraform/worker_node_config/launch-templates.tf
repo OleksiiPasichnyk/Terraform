@@ -1,7 +1,7 @@
 resource "aws_launch_template" "k3s_worker" {
   name_prefix   = "k3s-worker-"
   image_id      = "ami-053b0d53c279acc90"
-  instance_type = "c6a.large"
+  instance_type = "t3.small"
   key_name      = "jenkins-ansible"
 
   vpc_security_group_ids = [data.aws_security_group.k3s_sg.id] 
@@ -14,7 +14,7 @@ resource "aws_launch_template" "k3s_worker" {
   iam_instance_profile {
     name = data.aws_iam_role.k3s_node_role.name
   }
-  
+
   tag_specifications {
     resource_type = "instance"
     tags = {
