@@ -25,6 +25,6 @@ data "aws_security_group" "k3s_sg" {
   name = "k3s-sg"
 }
 
-data "aws_iam_instance_profile" "k3s_node_profile" {
-  name = "k3s_node_profile"
+data "aws_iam_instance_profile" "k3s_node_role" {
+  name = "k3s_node_role"
 }
