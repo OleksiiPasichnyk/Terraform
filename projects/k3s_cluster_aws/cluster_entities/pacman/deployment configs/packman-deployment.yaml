@@ -1,5 +1,19 @@
----
 
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pac-man-route
+  namespace: pacman
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pacman-test.paxel.ca`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: pac-man
+          port: 8080
+---
 # Service Definition for Pac-Man Application
 apiVersion: v1
 kind: Service
@@ -9,7 +23,8 @@ metadata:
   labels:
     name: pac-man
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    traefik.ingress.kubernetes.io/service-weight: "1"
+    traefik.ingress.kubernetes.io/service-path: "/"
 spec:
   selector:
     name: pac-man
@@ -17,7 +32,6 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: LoadBalancer
 
 
 ---

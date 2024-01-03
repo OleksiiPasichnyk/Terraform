@@ -1,0 +1,43 @@
+# Combined values.yaml
+providers:
+  kubernetesCRD:
+    enabled: true
+  aws:
+    credentials:
+      secretName: aws-route53-credentials
+      accessKey: AWS_ACCESS_KEY_ID
+      secretKey: AWS_SECRET_ACCESS_KEY
+    region: us-east-1
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+api:
+  insecure: true
+
+logs:
+  level: WARN # Using WARN log level from the second manifest
+
+ping: {}
+
+metrics: {}
+service:
+  type: LoadBalancer
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+deployment:
+  readinessProbe:
+    failureThreshold: 1
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 2
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 2

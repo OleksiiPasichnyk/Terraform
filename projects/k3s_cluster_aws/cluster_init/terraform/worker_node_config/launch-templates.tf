@@ -11,6 +11,9 @@ resource "aws_launch_template" "k3s_worker" {
   # curl -sfL https://get.k3s.io | K3S_URL=https://10.0.1.49:6443 K3S_TOKEN=u2Qw5PbXC887MMv85LeG sh -s - agent
   # EOF
   # )
+  iam_instance_profile {
+    name = aws_iam_instance_profile.k3s_node_profile.name
+  }
   tag_specifications {
     resource_type = "instance"
     tags = {

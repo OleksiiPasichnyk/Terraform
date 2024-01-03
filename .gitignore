@@ -6,3 +6,4 @@ ansible_inventory.ini
 .DS_Store
 /Docker/docker_jenkins/jenkins
 jenkins_backup_*
+secret-route53-*
