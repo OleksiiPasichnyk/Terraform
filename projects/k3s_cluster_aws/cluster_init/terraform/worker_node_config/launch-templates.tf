@@ -12,7 +12,7 @@ resource "aws_launch_template" "k3s_worker" {
   # EOF
   # )
   iam_instance_profile {
-    name = data.aws_iam_role.k3s_node_role.name
+    name = data.aws_instance_profile.k3s_node_instance_profile.name
   }
 
   tag_specifications {
