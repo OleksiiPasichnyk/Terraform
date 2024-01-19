@@ -17,7 +17,7 @@
 
     - name: Start k3s master node
       shell: |
-        curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --tls-san {{ master_ip_public }} --kubelet-arg=cloud-provider=external" sh -s - --token u2Qw5PbXC887MMv85LeG
+          curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --tls-san {{ master_ip_public }}" sh -s - --token u2Qw5PbXC887MMv85LeG
       args: 
         chdir: /tmp
         creates: /etc/systemd/system/k3s.service
