@@ -9,6 +9,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: pacman
+  namespace: pacman
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"

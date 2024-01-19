@@ -1,3 +1,9 @@
+# Namespace Definition
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pacman
+---
 # Service Definition for MongoDB (Unchanged)
 apiVersion: v1
 kind: Service

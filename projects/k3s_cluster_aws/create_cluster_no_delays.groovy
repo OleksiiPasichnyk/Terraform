@@ -25,11 +25,15 @@ pipeline {
                 }
             }
         }   
-        stage('Install JQ') {
+        stage('Install JQ, kubectl and Ansible') {
             steps {
                 sh '''
                 sudo apt-get update
-                sudo apt-get install jq -y
+                sudo apt-get install -y jq apt-transport-https ca-certificates curl
+                sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+                echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+                sudo apt-get update
+                sudo apt-get install -y kubectl ansible
                 '''
             }
         }
@@ -97,15 +101,6 @@ pipeline {
                 '''
             }
         }
-        stage('Install Ansible') {
-            steps {
-                sh '''
-                sudo apt-add-repository ppa:ansible/ansible -y
-                sudo apt-get update
-                sudo apt-get install ansible -y
-                '''
-            }
-        }
         stage('Run Ansible Playbooks') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'access_for_new_node_js_app', keyFileVariable: 'SSH_KEY')]) {
@@ -118,24 +113,25 @@ pipeline {
             }
         }
         stage('Install ingress and pacman in k3s') {
-            steps {
-                step ('Install ingress') {
-                sh '''
-                cd ./projects/k3s_cluster_aws/cluster_init/aws_ingress_setup
-                kubectl apply -f 1.metallb.yaml
-                sleep 60
-                kubectl apply -f 2.nginx-ingress.yaml
-                '''
-                }
-                step ('Install pacman') {
-                sh '''
-                cd ./projects/k3s_cluster_aws/cluster_entities/pacman
-                kubectl apply -f mongo-deployment.yaml
-                kubectl apply -f packman-deployment.yaml
-                '''
-                }
+    steps {
+        script {
+            sh '''
+            cd ./projects/k3s_cluster_aws/cluster_init/aws_ingress_setup
+            kubectl apply -f 1.metallb.yaml
+            sleep 60
+            kubectl apply -f 2.nginx-ingress.yaml
+            '''
+        }
+        script {
+            sh '''
+            cd ./projects/k3s_cluster_aws/cluster_entities/pacman
+            kubectl apply -f mongo-deployment.yaml
+            kubectl apply -f packman-deployment.yaml
+            '''
             }
         }
+    }
+
         stage('Create Route53 Record') {
             steps {
                 sh '''

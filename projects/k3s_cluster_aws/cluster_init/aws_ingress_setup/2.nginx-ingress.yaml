@@ -388,6 +388,7 @@ spec:
         app.kubernetes.io/instance: ingress-nginx
         app.kubernetes.io/name: ingress-nginx
     spec:
+      hostNetwork: true  # Enable host network
       containers:
       - args:
         - /nginx-ingress-controller
@@ -474,6 +475,7 @@ spec:
       - name: webhook-cert
         secret:
           secretName: ingress-nginx-admission
+      
   
 ---
 apiVersion: batch/v1
