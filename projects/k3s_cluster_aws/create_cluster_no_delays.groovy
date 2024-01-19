@@ -16,7 +16,7 @@ pipeline {
                               doGenerateSubmoduleConfigurations: false,
                               extensions: [[
                                   $class: 'SparseCheckoutPaths', 
-                                  sparseCheckoutPaths: [[path: 'projects/k3s_cluster_aws/cluster_init/']]
+                                  sparseCheckoutPaths: [[path: 'projects/k3s_cluster_aws/']]
                               ]],
                               userRemoteConfigs: [[
                                   url: 'https://github.com/OleksiiPasichnyk/Terraform.git'
@@ -115,6 +115,35 @@ pipeline {
                 ansible-playbook -i worker_ip.txt worker_setup.yml -u ubuntu --private-key=$SSH_KEY -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
                 '''
                 }
+            }
+        }
+        stage('Install ingress and pacman in k3s') {
+            steps {
+                step ('Install ingress') {
+                sh '''
+                cd ./projects/k3s_cluster_aws/cluster_init/aws_ingress_setup
+                kubectl apply -f 1.metallb.yaml
+                sleep 60
+                kubectl apply -f 2.nginx-ingress.yaml
+                '''
+                }
+                step ('Install pacman') {
+                sh '''
+                cd ./projects/k3s_cluster_aws/cluster_entities/pacman
+                kubectl apply -f mongo-deployment.yaml
+                kubectl apply -f packman-deployment.yaml
+                '''
+                }
+            }
+        }
+        stage('Create Route53 Record') {
+            steps {
+                sh '''
+                cd ./projects/k3s_cluster_aws/cluster_init/terraform/route53_record
+                terraform init -input=false
+                terraform plan -out=terraform.tfplan
+                terraform apply -input=false terraform.tfplan
+                '''
             }
         }
     }
