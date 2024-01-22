@@ -1,7 +1,7 @@
 resource "aws_launch_template" "k3s_master" {
   name_prefix   = "k3s-master-"
   image_id      = "ami-053b0d53c279acc90" # Update with the correct AMI ID
-  instance_type = "t3.small"             # Update as necessary
+  instance_type = "c6a.large"             # Update as necessary
   key_name      = "jenkins-ansible"       # Update with your SSH key name
 
 
