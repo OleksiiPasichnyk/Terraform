@@ -19,7 +19,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: ec2-18-206-184-225.compute-1.amazonaws.com
+    - host: ec2-54-159-128-3.compute-1.amazonaws.com
       http:
         paths:
           - path: /
