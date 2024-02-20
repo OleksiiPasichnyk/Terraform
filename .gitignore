@@ -7,3 +7,5 @@ ansible_inventory.ini
 /Docker/docker_jenkins/jenkins
 jenkins_backup_*
 secret-route53-*
+.vscode
+
